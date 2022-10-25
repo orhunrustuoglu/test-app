@@ -7,7 +7,7 @@ function PostsScreen() {
   const [isLoading, setLoading] = useState(true); //for ui give feedback while fetching data
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0); //for pagination
+  const [currentPage, setCurrentPage] = useState(1); //for pagination
 
   var userId = window.location.href.substring(
     window.location.href.length - 7,
@@ -65,7 +65,7 @@ function PostsScreen() {
       >
         <Accordion style={{ width: 500 }}>
           {posts
-            .slice(currentPage % 5, (currentPage % 5) + 5)
+            .slice((currentPage - 1) * 5, (currentPage - 1) * 5 + 5)
             .map((post, index) => {
               return (
                 <Accordion.Item eventKey={index}>
@@ -122,7 +122,7 @@ function PostsScreen() {
           marginBottom: "20px",
         }}
       >
-        {currentPage > 0 ? (
+        {currentPage > 1 ? (
           <Button
             style={{
               marginRight: "10px",
