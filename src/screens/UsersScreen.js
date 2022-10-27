@@ -1,29 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import { MoreHorizontal } from "react-feather";
-import { Link, Routes } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { getUsers } from "../usersSlice";
 import UserScreen from "./UserScreen";
 
 function UsersScreen() {
-  const [isLoading, setLoading] = useState(true);
-  const [users, setUsers] = useState([]);
-  // const [selectedUser, setSelectedUser] = useState(0);
+  const fetchedUsers = useSelector((state) => state.users.content);
+  const isLoadingUsers = useSelector((state) => state.users.loadingUsers);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    //todo fetch data with props later
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setLoading(false);
-        console.log(data);
-        setUsers(data);
-        //console.log(users.find((user) => (user.id = 1)));
-      });
+    dispatch(getUsers());
   }, []);
 
-  if (isLoading) {
+  if (isLoadingUsers) {
     return (
       <div
         style={{
@@ -38,8 +30,6 @@ function UsersScreen() {
     );
   }
 
-  // if (selectedUser !== 0) return;
-  // <UserScreen props={users[selectedUser]} />;
   return (
     <div
       style={{
@@ -60,7 +50,7 @@ function UsersScreen() {
           </tr>
         </thead>
         <tbody>
-          {users.map((user, index) => {
+          {fetchedUsers.map((user, index) => {
             return (
               <tr>
                 <td>{user["id"]}</td>
@@ -68,13 +58,9 @@ function UsersScreen() {
                 <td>{user["username"]}</td>
                 <td>{user["email"]}</td>
                 <td>
-                  <Link
-                    to={"/users/" + user["id"]}
-                    element={<UserScreen props={users} />}
-                  >
+                  <Link to={"/users/" + user["id"]} element={<UserScreen />}>
                     <MoreHorizontal />
                   </Link>
-                  {/* <UserScreen props={users} /> */}
                 </td>
               </tr>
             );
