@@ -26,7 +26,8 @@ function PostsScreen() {
       })
       .then((data) => {
         //filter posts accordingly to the previously selected user
-        setPosts(data.filter((p) => p["userId"] == userId));
+        setPosts(data.find(p, p["userId"] == userId));
+        //lodash .find implemented
       })
       .then((_) => {
         //fetch all the comments, filtering will be handled within the post's card
@@ -84,37 +85,36 @@ function PostsScreen() {
                     </p>
                   </Accordion.Header>
                   <Accordion.Body>
-                    {comments
-                      .filter((c) => c.postId == post.id)
-                      .map((comment) => {
-                        return (
-                          <Card body>
-                            <p>
-                              <a style={{ fontSize: 14 }}>
-                                <strong>
-                                  {comment.name.charAt(0).toUpperCase() +
-                                    comment.name.slice(1)}
-                                </strong>
-                              </a>
-                              <br />
-                              <a style={{ fontSize: 10, color: "grey" }}>
-                                {comment.email.charAt(0).toLowerCase() +
-                                  comment.email.slice(1)}
-                              </a>
-                              <br />
-                              <a
-                                style={{
-                                  fontSize: 12,
-                                  color: "grey",
-                                }}
-                              >
-                                {comment.body.charAt(0).toUpperCase() +
-                                  comment.body.slice(1)}
-                              </a>
-                            </p>
-                          </Card>
-                        );
-                      })}
+                    {comments.find(c, c.postId == post.id).map((comment) => {
+                      //lodash .find implemented
+                      return (
+                        <Card body>
+                          <p>
+                            <a style={{ fontSize: 14 }}>
+                              <strong>
+                                {comment.name.charAt(0).toUpperCase() +
+                                  comment.name.slice(1)}
+                              </strong>
+                            </a>
+                            <br />
+                            <a style={{ fontSize: 10, color: "grey" }}>
+                              {comment.email.charAt(0).toLowerCase() +
+                                comment.email.slice(1)}
+                            </a>
+                            <br />
+                            <a
+                              style={{
+                                fontSize: 12,
+                                color: "grey",
+                              }}
+                            >
+                              {comment.body.charAt(0).toUpperCase() +
+                                comment.body.slice(1)}
+                            </a>
+                          </p>
+                        </Card>
+                      );
+                    })}
                   </Accordion.Body>
                 </Accordion.Item>
               );
