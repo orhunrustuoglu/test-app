@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   content: [],
   loadingUsers: true,
+  currentUser: {},
 };
 
 export const usersSlice = createSlice({
@@ -16,6 +17,10 @@ export const usersSlice = createSlice({
     setLoadingUsers: (state, loadingStatus) => {
       state.loadingUsers = loadingStatus.payload;
       console.log(state.loadingUsers);
+    },
+    setCurrentUser: (state, user) => {
+      state.currentUser = user.payload;
+      console.log(state.currentUser);
     },
   },
 });
@@ -33,6 +38,10 @@ export const getUsers = () => async (dispatch) => {
     });
 };
 
-export const { setUsers, setLoadingUsers } = usersSlice.actions;
+export const setUser = (user) => (dispatch) => {
+  dispatch(setCurrentUser(user));
+};
+
+export const { setUsers, setLoadingUsers, setCurrentUser } = usersSlice.actions;
 
 export default usersSlice.reducer;

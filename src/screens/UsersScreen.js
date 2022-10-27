@@ -3,14 +3,14 @@ import Table from "react-bootstrap/Table";
 import { MoreHorizontal } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getUsers } from "../usersSlice";
+import { getUsers, setUser } from "../usersSlice";
 import UserScreen from "./UserScreen";
 
 function UsersScreen() {
   const fetchedUsers = useSelector((state) => state.users.content);
   const isLoadingUsers = useSelector((state) => state.users.loadingUsers);
   const dispatch = useDispatch();
-
+  const selectedUser = useSelector((state) => state.users.currentUser);
   useEffect(() => {
     dispatch(getUsers());
   }, []);
@@ -58,9 +58,16 @@ function UsersScreen() {
                 <td>{user["username"]}</td>
                 <td>{user["email"]}</td>
                 <td>
-                  <Link to={"/users/" + user["id"]} element={<UserScreen />}>
-                    <MoreHorizontal />
-                  </Link>
+                  <button
+                    onClick={() => {
+                      dispatch(setUser(user));
+                      //console.log(selectedUser);
+                    }}
+                  >
+                    <Link to={"/users/" + user["id"]} element={<UserScreen />}>
+                      <MoreHorizontal />
+                    </Link>
+                  </button>
                 </td>
               </tr>
             );

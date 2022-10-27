@@ -1,42 +1,17 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function UserScreen() {
-  const [isLoading, setLoading] = useState(true);
-  const [user, setUser] = useState({});
-  const userId = window.location.href.substring(
-    window.location.href.length - 1
-  );
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users/" + userId)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setUser(data);
-        console.log(data);
-        setLoading(false);
-      });
-  }, []);
+  const user = useSelector((state) => state.users.currentUser);
+  console.log(user);
+
   const navigate = useNavigate();
   const handleOnClick = useCallback(
-    () => navigate("/users/" + userId + "/posts", { replace: true }),
+    () => navigate("/users/" + user.id + "/posts", { replace: true }),
     [navigate]
   );
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <h1>Loading...</h1>;
-      </div>
-    );
-  }
+
   return (
     <div
       style={{
