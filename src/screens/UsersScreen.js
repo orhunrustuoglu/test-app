@@ -56,7 +56,10 @@ function UsersScreen() {
                 <td>{user["id"]}</td>
                 <td>{user["name"]}</td>
                 <td>{user["username"]}</td>
-                <td>{user["email"]}</td>
+                <td>
+                  {user["email"].charAt(0).toLowerCase() +
+                    user["email"].slice(1)}
+                </td>
                 <td>
                   <button
                     onClick={() => {

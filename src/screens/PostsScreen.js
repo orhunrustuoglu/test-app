@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import { useSelector } from "react-redux";
 
 function PostsScreen() {
   const [isLoading, setLoading] = useState(true); //for ui give feedback while fetching data
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); //for pagination
+  //useMemo can not be used for userId because useSelector can not be called within a callback
+  const userId = useSelector((state) => state.users.currentUser.id);
 
-  var userId = window.location.href.substring(
-    window.location.href.length - 7,
-    window.location.href.length - 6
-  ); //userId fetched this way because or else strict mode renders twice and route gets corrupted
+  //todo useCallback for useStates
+  const handlePageClick = useCallback(() => {
+    setCurrentPage(currentPage - 1);
+  }, [currentPage]);
 
   useEffect(() => {
     //first get posts
@@ -65,6 +68,7 @@ function PostsScreen() {
       >
         <Accordion style={{ width: 500 }}>
           {posts
+            //can not use useMemo for this because we want this to re-calculate
             .slice((currentPage - 1) * 5, (currentPage - 1) * 5 + 5)
             .map((post, index) => {
               return (
@@ -128,9 +132,7 @@ function PostsScreen() {
               marginRight: "10px",
             }}
             variant="outline-dark"
-            onClick={() => {
-              setCurrentPage(currentPage - 1);
-            }}
+            onClick={handlePageClick}
           >
             {"<"}
           </Button>
